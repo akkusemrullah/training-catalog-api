@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "gxzwvAHVQgqjpZ85f8jbcAbbbyU5ZUUPLZ54IwwpylQ=",
+  "Source": "training-catalog-api",
+  "BasePath": "_content/training-catalog-api",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}
