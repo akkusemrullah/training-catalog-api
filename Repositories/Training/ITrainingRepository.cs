@@ -7,6 +7,6 @@ namespace training_catalog_api.Repositories.Training
         Task<Models.Training> GetTrainingAsync(int id);
         Task AddTrainingAsync(Models.Training training);
         Task UpdateTrainingAsync(Models.Training training);
-        Task DeleteTrainingAsync(Models.Training training);
+        Task DeleteTrainingAsync(int id);
     }
 }

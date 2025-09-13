@@ -7,6 +7,6 @@ namespace training_catalog_api.Repositories.Category{
         Task<Models.Category> GetCategoryByIdAsync(int id);
         Task AddCategoryAsync(Models.Category category);
         Task UpdateCategoryAsync(Models.Category category);
-        Task DeleteCategoryAsync(Models.Category category);   
+        Task DeleteCategoryAsync(int id);   
     }
 }

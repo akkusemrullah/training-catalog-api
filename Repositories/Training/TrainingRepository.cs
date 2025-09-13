@@ -18,15 +18,16 @@ namespace training_catalog_api.Repositories.Training
             await context.SaveChangesAsync();
         }
 
-        public async Task DeleteTrainingAsync(Models.Training training)
+        public async Task DeleteTrainingAsync(int id)
         {
+            var training = await context.Trainings.FirstOrDefaultAsync(x => x.Id == id);
             context.Trainings.Remove(training);
             await context.SaveChangesAsync();
         }
 
         public async Task<Models.Training> GetTrainingAsync(int id)
         {
-            return await context.Trainings.Include(x => x.Category).FirstOrDefaultAsync(t => t.Id == id);
+            return await context.Trainings.AsNoTracking().Include(x => x.Category).FirstOrDefaultAsync(t => t.Id == id);
         }
 
         public async Task<List<Models.Training>> GetTrainingListAsync()

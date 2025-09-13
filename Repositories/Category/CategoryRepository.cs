@@ -17,10 +17,15 @@ namespace training_catalog_api.Repositories.Category{
             await context.SaveChangesAsync();
         }
 
-        public async Task DeleteCategoryAsync(Models.Category category)
+        public async Task DeleteCategoryAsync(int id)
         {
-            context.Categories.Remove(category);
-            await context.SaveChangesAsync();
+            var category = await
+            
+            context.Categories.FirstOrDefaultAsync(x => x.Id==id);
+            if (category != null) {
+                context.Categories.Remove(category);
+                await context.SaveChangesAsync();
+            }
         }
 
         public async Task<List<Models.Category>> GetCategoriesListAsync()
@@ -29,10 +34,14 @@ namespace training_catalog_api.Repositories.Category{
             return await categoryList;
         }
 
-        public async Task<Models.Category> GetCategoryByIdAsync(int id)
+        public async Task<Models.Category?> GetCategoryByIdAsync(int id)
         {
-            var category = context.Categories.Include(c=> c.Trainings).FirstOrDefaultAsync(x => x.Id == id);
-            return await category;
+            var category = await context.Categories.AsNoTracking().Include(c => c.Trainings).FirstOrDefaultAsync(x => x.Id == id);
+            if (category == null)
+            {
+                return null;
+            }
+            return category;
         }
 
         public async Task UpdateCategoryAsync(Models.Category category)

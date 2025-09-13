@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("training-catalog-api")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+33be80e95490c7dddfe60b4f9d430e29ce0d525d")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+303a4cd708517f11ca8713ffceb799f6e26792a5")]
 [assembly: System.Reflection.AssemblyProductAttribute("training-catalog-api")]
 [assembly: System.Reflection.AssemblyTitleAttribute("training-catalog-api")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
