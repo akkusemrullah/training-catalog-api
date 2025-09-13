@@ -19,6 +19,11 @@ namespace training_catalog_api.Validators.Training
             RuleFor(x => x.LongDescription)
             .NotEmpty().WithMessage("Uzun açıklama zorunludur.");
 
+            RuleFor(x => x.EndDate)
+           .GreaterThanOrEqualTo(x => x.StartDate)
+           .When(x => x.StartDate.HasValue && x.EndDate.HasValue)
+           .WithMessage("Bitiş tarihi başlangıç tarihinden küçük olamaz.");
+
             RuleFor(x => x.ImageUrl)
             .Must(UrlValid).When(x => !string.IsNullOrEmpty(x.ImageUrl))
             .WithMessage("Geçersiz resim");
