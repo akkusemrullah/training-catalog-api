@@ -17,7 +17,7 @@ namespace training_catalog_api.Services.Category
             {
                 CategoryName = dto.CategoryName
             };
-            categoryRepository.AddCategoryAsync(category);
+            await categoryRepository.AddCategoryAsync(category);
             Console.WriteLine(category.Id.ToString());
             return category.Id;
         }

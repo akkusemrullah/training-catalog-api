@@ -28,21 +28,21 @@ namespace training_catalog_api.Services.Training
                 UpdatedAt = dto.UpdatedAt
             };
 
-            trainingRepository.AddTrainingAsync(training);
+            await trainingRepository.AddTrainingAsync(training);
             Console.WriteLine(training.Id.ToString());
             return training.Id;
         }
 
         public async Task<bool> DeleteAsync(int id)
         {
-            var training = trainingRepository.GetTrainingAsync(id);
+            var training = await trainingRepository.GetTrainingAsync(id);
 
             if (training == null)
             {
                 return false;
             }
 
-            trainingRepository.DeleteTrainingAsync(id);
+            await trainingRepository.DeleteTrainingAsync(id);
             return true;
         }
 
@@ -54,8 +54,8 @@ namespace training_catalog_api.Services.Training
 
         public async Task<Models.Training> GetByIdAsync(int id)
         {
-            var category = await trainingRepository.GetTrainingAsync(id);
-            return category;
+            var training = await trainingRepository.GetTrainingAsync(id);
+            return training;
         }
 
         public async Task<bool> UpdateAsync(TrainingUpdateDto dto, int id)
