@@ -2,6 +2,7 @@ using System.Text.Json;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
 using training_catalog_api.Data;
 using training_catalog_api.Repositories.Category;
 using training_catalog_api.Repositories.Training;
@@ -17,6 +18,8 @@ builder.Services.AddControllers()
         o.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
         o.JsonSerializerOptions.DefaultIgnoreCondition =
             System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
+        o.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+        o.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
     });
 
 // Validation
