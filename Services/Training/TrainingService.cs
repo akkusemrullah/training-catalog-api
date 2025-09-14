@@ -35,7 +35,7 @@ namespace training_catalog_api.Services.Training
 
         public async Task<bool> DeleteAsync(int id)
         {
-            var training = await trainingRepository.GetTrainingAsync(id);
+            var training = await trainingRepository.GetTrainingByIdAsync(id);
 
             if (training == null)
             {
@@ -46,21 +46,21 @@ namespace training_catalog_api.Services.Training
             return true;
         }
 
-        public async Task<IEnumerable<Models.Training>> GetAllAsync()
+        public async Task<IEnumerable<Models.Training>> GetAllAsync(int pageNumber, int pageSize)
         {
-            var list = await trainingRepository.GetTrainingListAsync();
+            var list = await trainingRepository.GetTrainingListAsync(pageNumber, pageSize);
             return list;
         }
 
         public async Task<Models.Training> GetByIdAsync(int id)
         {
-            var training = await trainingRepository.GetTrainingAsync(id);
+            var training = await trainingRepository.GetTrainingByIdAsync(id);
             return training;
         }
 
         public async Task<bool> UpdateAsync(TrainingUpdateDto dto, int id)
         {
-            var existTraining = await trainingRepository.GetTrainingAsync(id);
+            var existTraining = await trainingRepository.GetTrainingByIdAsync(id);
             if (existTraining == null)
             {
                 return false;

@@ -2,7 +2,7 @@ namespace training_catalog_api.Services.Training
 {
     public interface ITrainingService
     {
-        Task<IEnumerable<Models.Training>> GetAllAsync();
+        Task<IEnumerable<Models.Training>> GetAllAsync(int pageNumber, int pageSize);
         Task<Models.Training> GetByIdAsync(int id);
         Task<int> CreateAsync(DTO.Training.TrainingCreateDto dto);
         Task<bool> UpdateAsync(DTO.Training.TrainingUpdateDto dto, int id);

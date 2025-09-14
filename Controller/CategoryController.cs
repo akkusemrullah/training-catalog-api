@@ -25,37 +25,52 @@ namespace training_catalog_api.Controller
             return Ok(categories);
         }
 
-        [HttpGet("id")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetCategoryById(int id)
         {
             var category = await categoryService.GetByIdAsync(id);
-            if (category != null)
+            if (category == null)
             {
-                return Ok(category);
+                return NotFound();
             }
-            return NoContent();
+            return Ok(category);
         }
 
         [HttpPost]
         public async Task<IActionResult> CreateCategory(DTO.Category.CategoryCreateDto category)
         {
-            int result = await categoryService.CreateAsync(category);
-            return result >= 0 ? Ok() : BadRequest();
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            int id = await categoryService.CreateAsync(category);
+            if (id <= 0)
+            {
+                return BadRequest();
+            }
+
+            var createdCategory = await categoryService.GetByIdAsync(id);
+            return CreatedAtAction(nameof(GetCategoryById), new { id }, createdCategory);
         }
 
-        [HttpPut("id")]
+        [HttpPut("{id}")]
         public async Task<IActionResult> UpdateCategory(DTO.Category.CategoryUpdateDto category, int id)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             bool result = await categoryService.UpdateAsync(category, id);
-            return result == true ? Ok() : BadRequest();
+            return result ? NoContent() : NotFound();
         }
 
-        [HttpDelete("id")]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCategory(int id)
         {
             bool result = await categoryService.DeleteAsync(id);
-            Console.WriteLine(result);
-            return result == true ? Ok() : BadRequest();
+            return result ? NoContent() : NotFound();
         }
     }
 }

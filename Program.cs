@@ -1,6 +1,6 @@
 using System.Text.Json;
 using FluentValidation;
-using FluentValidation.AspNetCore; // AutoValidation için
+using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using training_catalog_api.Data;
 using training_catalog_api.Repositories.Category;
@@ -10,14 +10,16 @@ using training_catalog_api.Services.Training;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Controllers + JSON
 builder.Services.AddControllers()
     .AddJsonOptions(o =>
     {
         o.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
-        o.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
+        o.JsonSerializerOptions.DefaultIgnoreCondition =
+            System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
     });
 
-// FluentValidation (önerilen)
+// Validation
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 
@@ -31,6 +33,7 @@ builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<ITrainingRepository, TrainingRepository>();
 builder.Services.AddScoped<ITrainingService, TrainingService>();
 
+// CORS
 const string CorsPolicy = "frontend";
 builder.Services.AddCors(opt =>
 {
@@ -40,29 +43,29 @@ builder.Services.AddCors(opt =>
         .AllowAnyMethod());
 });
 
+// ProblemDetails (+ ExceptionHandler bunu kullanır)
 builder.Services.AddProblemDetails();
 
+// Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-
-app.UseExceptionHandler(_ => { });   
-app.UseStatusCodePages(); 
-
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+// Global error handler -> ProblemDetails üretir
+app.UseExceptionHandler();
+app.UseStatusCodePages();
 
 app.UseHttpsRedirection();
 
 app.UseCors(CorsPolicy);
 
+app.UseSwagger();
+app.UseSwaggerUI();
+
 app.MapControllers();
 
+// DB migrate
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();

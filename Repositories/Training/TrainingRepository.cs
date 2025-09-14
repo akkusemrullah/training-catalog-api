@@ -21,18 +21,33 @@ namespace training_catalog_api.Repositories.Training
         public async Task DeleteTrainingAsync(int id)
         {
             var training = await context.Trainings.FirstOrDefaultAsync(x => x.Id == id);
-            context.Trainings.Remove(training);
-            await context.SaveChangesAsync();
+            if (training != null)
+            {
+                context.Trainings.Remove(training);
+                await context.SaveChangesAsync();
+            }
         }
 
-        public async Task<Models.Training> GetTrainingAsync(int id)
+        public async Task<Models.Training?> GetTrainingByIdAsync(int id)
         {
-            return await context.Trainings.AsNoTracking().Include(x => x.Category).FirstOrDefaultAsync(t => t.Id == id);
+
+            var training = await context.Trainings.AsNoTracking().Include(x => x.Category).FirstOrDefaultAsync(x => x.Id == id);
+            if (training == null)
+            {
+                Console.WriteLine("Trainin bulunamadı.");
+                return null;
+            }
+            Console.WriteLine("Trainin bulundu.");
+            return training;
         }
 
-        public async Task<List<Models.Training>> GetTrainingListAsync()
+        public async Task<List<Models.Training>> GetTrainingListAsync(int pageNumber, int pageSize)
         {
-            return await context.Trainings.AsNoTracking().ToListAsync();
+            return await context.Trainings
+              .AsNoTracking()
+              .Skip((pageNumber - 1) * pageSize)
+              .Take(pageSize)
+              .ToListAsync();
         }
 
         public async Task UpdateTrainingAsync(Models.Training training)

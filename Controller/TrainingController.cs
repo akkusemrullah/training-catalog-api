@@ -15,9 +15,9 @@ namespace training_catalog_api.Controller
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllTrainings()
+        public async Task<IActionResult> GetAllTrainings([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
-            var trainings = await trainingService.GetAllAsync();
+            var trainings = await trainingService.GetAllAsync(pageNumber, pageSize);
             if (!trainings.Any())
             {
                 return NoContent();
@@ -25,37 +25,51 @@ namespace training_catalog_api.Controller
             return Ok(trainings);
         }
 
-        [HttpGet("id")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetTrainingById(int id)
         {
             var training = await trainingService.GetByIdAsync(id);
-            if (training != null)
+            if (training == null)
             {
-                return Ok(training);
+                return NotFound();
             }
-            return NoContent();
+            return Ok(training);
         }
 
         [HttpPost]
         public async Task<IActionResult> CreateTraining(DTO.Training.TrainingCreateDto training)
         {
-            int result = await trainingService.CreateAsync(training);
-            return result > 0 ? Ok() : BadRequest();
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            int id = await trainingService.CreateAsync(training);
+            if (id <= 0)
+            {
+                return BadRequest();
+            }
+
+            var createdTraining = await trainingService.GetByIdAsync(id);
+            return CreatedAtAction(nameof(GetTrainingById), new { id }, createdTraining);
         }
 
-        [HttpPut("id")]
+        [HttpPut("{id}")]
         public async Task<IActionResult> UpdateTraining(DTO.Training.TrainingUpdateDto training, int id)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             bool result = await trainingService.UpdateAsync(training, id);
-            return result == true ? Ok() : BadRequest();
+            return result ? NoContent() : NotFound();
         }
 
-        [HttpDelete("id")]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTraining(int id)
         {
             bool result = await trainingService.DeleteAsync(id);
-            Console.WriteLine(result);
-            return result == true ? Ok() : BadRequest();
+            return result ? NoContent() : NotFound();
         }
     }
 }
