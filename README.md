@@ -196,5 +196,5 @@ Uygulama ayağa kalktığında Swagger UI otomatik olarak servis edilir.
 `AddSwaggerGen` konfigürasyonunu genişleterek ek açıklamalar ekleyebilirsiniz.【F:Program.cs†L52-L68】
 
 ## API Yanıt Önizlemeleri
-- ![Sayfalama yanıtı örneği](data/list-view.png)
-- ![Detay yanıtı örneği](data/detail-view.png)
+- ![Sayfalama yanıtı örneği](docs/list-view.png)
+- ![Detay yanıtı örneği](docs/detail-view.png)
