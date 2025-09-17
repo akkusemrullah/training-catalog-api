@@ -13,10 +13,10 @@ ile uygular ve tüm CRUD akışını Swagger üzerinden belgelendirir.
 ## Teknoloji
 | Bileşen | Sürüm | Not |
 | --- | --- | --- |
-| ASP.NET Core Web API | net9.0 | Minimal hosting modeli ve `MapControllers` kullanımı.【F:training-catalog-api.csproj†L1-L22】【F:Program.cs†L12-L70】 |
-| EF Core + SQLite | 9.0.x | `AppDbContext` aracılığıyla eğitim ve kategori tablolarını yönetir.【F:Data/AppDbContext.cs†L6-L48】 |
-| FluentValidation.AspNetCore | 11.3.1 | DTO tabanlı doğrulama zincirleri sağlar.【F:training-catalog-api.csproj†L10-L20】【F:Validators/Training/TrainingCreateDtoValidator.cs†L7-L35】 |
-| Swashbuckle (Swagger) | 9.0.4 | Otomatik API belgesi üretimi ve test konsolu.【F:training-catalog-api.csproj†L10-L20】【F:Program.cs†L52-L68】 |
+| ASP.NET Core Web API | net9.0 | Minimal hosting modeli ve `MapControllers` kullanımı.
+| EF Core + SQLite | 9.0.x | `AppDbContext` aracılığıyla eğitim ve kategori tablolarını yönetir.
+| FluentValidation.AspNetCore | 11.3.1 | DTO tabanlı doğrulama zincirleri sağlar.
+| Swashbuckle (Swagger) | 9.0.4 | Otomatik API belgesi üretimi ve test konsolu.
 
 ## Proje Yapısı
 ```
@@ -47,7 +47,7 @@ ConnectionStrings__DefaultConnection=Data Source=training.db
 ```
 
 CORS politikası varsayılan olarak `http://localhost:5173` adresine izin verir; farklı istemciler için
-`Program.cs` içerisinde `CorsPolicy` tanımını güncelleyin.【F:Program.cs†L39-L47】
+`Program.cs` içerisinde `CorsPolicy` tanımını güncelleyin.
 
 ## Çalıştırma Adımları
 1. Bağımlılıkları yükleyin:
@@ -62,51 +62,51 @@ CORS politikası varsayılan olarak `http://localhost:5173` adresine izin verir;
    ```bash
    dotnet watch run
    ```
-   Varsayılan adresler `http://localhost:5212` ve `https://localhost:7236` olarak belirlenmiştir.【F:Properties/launchSettings.json†L4-L22】
+   Varsayılan adresler `http://localhost:5212` ve `https://localhost:7236` olarak belirlenmiştir.
 
 İlk çalıştırmada `Program.cs` içerisinde tanımlanan scope sayesinde migration işlemi otomatik olarak
-uygulanır.【F:Program.cs†L71-L76】
+uygulanır.
 
 ## Veri Modeli
 ### Training
 | Alan | Tip | Kurallar |
 | --- | --- | --- |
-| `Id` | int | Otomatik artan birincil anahtar.【F:Models/Training.cs†L5-L19】 |
-| `Title` | string (≤120) | Zorunlu; uzunluk sınırı FluentValidation ile kontrol edilir.【F:Models/Training.cs†L7-L18】【F:Validators/Training/TrainingCreateDtoValidator.cs†L11-L18】 |
-| `ShortDescription` | string (≤280) | Zorunlu alan ve maksimum uzunluk doğrulaması.【F:Models/Training.cs†L7-L18】【F:Validators/Training/TrainingCreateDtoValidator.cs†L15-L18】 |
-| `LongDescription` | string | Boş bırakılamaz.【F:Models/Training.cs†L7-L18】【F:Validators/Training/TrainingCreateDtoValidator.cs†L19-L20】 |
-| `CategoryId` | int? | Opsiyonel yabancı anahtar; ilişkiler `AppDbContext` üzerinde tanımlanmıştır.【F:Models/Training.cs†L11-L12】【F:Data/AppDbContext.cs†L43-L47】 |
-| `ImageUrl` | string? | URL formatı kontrol edilir.【F:Models/Training.cs†L13】【F:Validators/Training/TrainingCreateDtoValidator.cs†L27-L35】 |
-| `StartDate` / `EndDate` | DateTime? | `EndDate >= StartDate` şartı sağlanmalıdır.【F:Models/Training.cs†L14-L15】【F:Validators/Training/TrainingCreateDtoValidator.cs†L22-L25】 |
-| `IsPublished` | bool | Yayın durumunu ifade eder.【F:Models/Training.cs†L16】 |
-| `CreatedAt` / `UpdatedAt` | DateTime? | Oluşturma ve güncelleme zaman damgaları.【F:Models/Training.cs†L17-L18】 |
+| `Id` | int | Otomatik artan birincil anahtar.
+| `Title` | string (≤120) | Zorunlu; uzunluk sınırı FluentValidation ile kontrol edilir.
+| `ShortDescription` | string (≤280) | Zorunlu alan ve maksimum uzunluk doğrulaması.
+| `LongDescription` | string | Boş bırakılamaz.
+| `CategoryId` | int? | Opsiyonel yabancı anahtar; ilişkiler `AppDbContext` üzerinde tanımlanmıştır.
+| `ImageUrl` | string? | URL formatı kontrol edilir.
+| `StartDate` / `EndDate` | DateTime? | `EndDate >= StartDate` şartı sağlanmalıdır.
+| `IsPublished` | bool | Yayın durumunu ifade eder.
+| `CreatedAt` / `UpdatedAt` | DateTime? | Oluşturma ve güncelleme zaman damgaları.
 
 ### Category
 | Alan | Tip | Kurallar |
 | --- | --- | --- |
-| `Id` | int | Birincil anahtar.【F:Models/Category.cs†L3-L8】 |
-| `CategoryName` | string | Zorunlu alan; boş gönderim reddedilir.【F:Models/Category.cs†L5-L7】【F:Validators/Category/CategoryCreateDtoValidator.cs†L6-L11】 |
-| `Trainings` | `ICollection<Training>` | İlişkili eğitimler otomatik yüklenebilir (include).【F:Models/Category.cs†L5-L7】【F:Data/AppDbContext.cs†L43-L47】 |
+| `Id` | int | Birincil anahtar.
+| `CategoryName` | string | Zorunlu alan; boş gönderim reddedilir.
+| `Trainings` | `ICollection<Training>` | İlişkili eğitimler otomatik yüklenebilir (include).
 
 ## Servis Akışı
 `Controller` katmanı HTTP isteklerini alır, FluentValidation kontrollerinden geçen DTO'ları servis
-katmanına iletir ve repository üzerinden veri erişimini tamamlar.【F:Controller/TrainingController.cs†L17-L73】【F:Controller/CategoryController.cs†L17-L74】【F:Services/Training/TrainingService.cs†L7-L84】【F:Services/Category/CategoryService.cs†L6-L62】
+katmanına iletir ve repository üzerinden veri erişimini tamamlar.
 Sayfalama `TrainingService.GetAllAsync` içerisinde yapılır ve repository `Skip/Take` kullanarak
-verileri döndürür.【F:Services/Training/TrainingService.cs†L49-L53】【F:Repositories/Training/TrainingRepository.cs†L44-L51】
+verileri döndürür.
 
 ## Uç Noktalar
 | Metot | URL | Açıklama |
 | --- | --- | --- |
-| GET | `/api/trainings?pageNumber=1&pageSize=10` | Eğitimi sayfalı listeler, kayıt yoksa `204 No Content` döner.【F:Controller/TrainingController.cs†L17-L26】 |
-| GET | `/api/trainings/{id}` | Tekil eğitim detayını döner; bulunamazsa `404 Not Found`.【F:Controller/TrainingController.cs†L28-L37】 |
-| POST | `/api/trainings` | Yeni eğitim oluşturur, geçersiz veri geldiğinde `400 Bad Request`.【F:Controller/TrainingController.cs†L39-L55】 |
-| PUT | `/api/trainings/{id}` | Mevcut kaydı günceller, başarıda `204 No Content`.【F:Controller/TrainingController.cs†L57-L66】 |
-| DELETE | `/api/trainings/{id}` | Kaydı siler; bulunamazsa `404 Not Found`.【F:Controller/TrainingController.cs†L68-L73】 |
-| GET | `/api/category` | Kategori listesini döner; kayıt yoksa `204 No Content`.【F:Controller/CategoryController.cs†L17-L26】 |
-| GET | `/api/category/{id}` | Tekil kategori ve ilişkili eğitimleri döner.【F:Controller/CategoryController.cs†L28-L37】【F:Repositories/Category/CategoryRepository.cs†L31-L45】 |
-| POST | `/api/category` | Kategori oluşturur, validasyon hatalarında `400 Bad Request`.【F:Controller/CategoryController.cs†L39-L55】 |
-| PUT | `/api/category/{id}` | Kategori günceller; başarısızlıkta `404 Not Found`.【F:Controller/CategoryController.cs†L57-L67】 |
-| DELETE | `/api/category/{id}` | Kategoriyi siler; bağlı eğitimler mevcutsa ilişkiden dolayı kısıt olabilir.【F:Controller/CategoryController.cs†L69-L73】【F:Data/AppDbContext.cs†L43-L47】 |
+| GET | `/api/trainings?pageNumber=1&pageSize=10` | Eğitimi sayfalı listeler, kayıt yoksa `204 No Content` döner.
+| GET | `/api/trainings/{id}` | Tekil eğitim detayını döner; bulunamazsa `404 Not Found`.
+| POST | `/api/trainings` | Yeni eğitim oluşturur, geçersiz veri geldiğinde `400 Bad Request`.
+| PUT | `/api/trainings/{id}` | Mevcut kaydı günceller, başarıda `204 No Content`.
+| DELETE | `/api/trainings/{id}` | Kaydı siler; bulunamazsa `404 Not Found`.
+| GET | `/api/category` | Kategori listesini döner; kayıt yoksa `204 No Content`.
+| GET | `/api/category/{id}` | Tekil kategori ve ilişkili eğitimleri döner.
+| POST | `/api/category` | Kategori oluşturur, validasyon hatalarında `400 Bad Request`.
+| PUT | `/api/category/{id}` | Kategori günceller; başarısızlıkta `404 Not Found`.
+| DELETE | `/api/category/{id}` | Kategoriyi siler; bağlı eğitimler mevcutsa ilişkiden dolayı kısıt olabilir.
 
 ## Örnek İstek ve Yanıtlar
 ### Eğitim Listeleme
@@ -188,12 +188,12 @@ Location: /api/trainings/5
 - `400 Bad Request`: FluentValidation hataları `ModelState` ile geri döner.
 - `404 Not Found`: İstenen kaynak bulunamadığında verilir.
 - `204 No Content`: Liste uç noktalarında veri olmadığında döner.
-- Global hatalar `ProblemDetails` yapısıyla üretilir ve `UseExceptionHandler` üzerinden servis edilir.【F:Controller/TrainingController.cs†L39-L52】【F:Controller/CategoryController.cs†L39-L55】【F:Program.cs†L49-L60】
+- Global hatalar `ProblemDetails` yapısıyla üretilir ve `UseExceptionHandler` üzerinden servis edilir.
 
 ## Dokümantasyon ve Gözlemlenebilirlik
 Uygulama ayağa kalktığında Swagger UI otomatik olarak servis edilir.
 `https://localhost:7236/swagger` adresinden uç noktaları test edebilir,
-`AddSwaggerGen` konfigürasyonunu genişleterek ek açıklamalar ekleyebilirsiniz.【F:Program.cs†L52-L68】
+`AddSwaggerGen` konfigürasyonunu genişleterek ek açıklamalar ekleyebilirsiniz.
 
 ## API Yanıt Önizlemeleri
 - ![Sayfalama yanıtı örneği](docs/screenshots/list-view.png)
