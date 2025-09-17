@@ -10,7 +10,7 @@ ile uygular ve tüm CRUD akışını Swagger üzerinden belgelendirir.
 - FluentValidation destekli alan kontrolleri ve ProblemDetails tabanlı hata yanıtları.
 - İlk çalıştırmada EF Core migration'larının otomatik uygulanması ve hazır Swagger arayüzü.
 
-## Teknoloji Yığını
+## Teknoloji
 | Bileşen | Sürüm | Not |
 | --- | --- | --- |
 | ASP.NET Core Web API | net9.0 | Minimal hosting modeli ve `MapControllers` kullanımı.【F:training-catalog-api.csproj†L1-L22】【F:Program.cs†L12-L70】 |
