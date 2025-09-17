@@ -215,8 +215,8 @@ Durum yönetimi temel olarak React state veya hafif bir query kütüphanesi (Rea
 
 ## Ekran Görüntüleri
 Bu README ile birlikte teslim edilen taslak SVG ön izlemeleri:
-- ![Liste ekranı taslağı](docs/screenshots/list-view.png)
-- ![Detay/Form ekranı taslağı](docs/screenshots/detail-view.png)
+- ![Liste ekranı taslağı](docs/list-view.png)
+- ![Detay/Form ekranı taslağı](docs/detail-view.png)
 
 Canlı ekran görüntüleri oluşturulduğunda aynı dosyaların üzerine yazabilirsiniz.
 
