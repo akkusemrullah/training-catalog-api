@@ -1,8 +1,10 @@
+using training_catalog_api.DTO.Common;
+
 namespace training_catalog_api.Services.Training
 {
     public interface ITrainingService
     {
-        Task<IEnumerable<Models.Training>> GetAllAsync(int pageNumber, int pageSize);
+        Task<SayfalamaDto<Models.Training>> GetAllAsync(TrainingListQuery q);
         Task<Models.Training> GetByIdAsync(int id);
         Task<int> CreateAsync(DTO.Training.TrainingCreateDto dto);
         Task<bool> UpdateAsync(DTO.Training.TrainingUpdateDto dto, int id);

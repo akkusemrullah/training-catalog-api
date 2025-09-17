@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using training_catalog_api.DTO.Common;
 using training_catalog_api.DTO.Training;
 using training_catalog_api.Repositories.Training;
 
@@ -46,12 +47,33 @@ namespace training_catalog_api.Services.Training
             return true;
         }
 
-        public async Task<IEnumerable<Models.Training>> GetAllAsync(int pageNumber, int pageSize)
+        public async Task<SayfalamaDto<Models.Training>> GetAllAsync(TrainingListQuery q)
         {
-            var list = await trainingRepository.GetTrainingListAsync(pageNumber, pageSize);
-            return list;
-        }
+            var page = q.Page < 1 ? 1 : q.Page;
+            var pageSize = q.PageSize is < 1 or > 50 ? 10 : q.PageSize;
+            var onlyPublished = q.IsPublished ?? true; // ödev gereği varsayılan true
 
+            var (trainings, totalItems) = await trainingRepository.GetTrainingListAsync(
+                new TrainingListQuery
+                {
+                    Search = q.Search,
+                    CategoryId = q.CategoryId,
+                    IsPublished = onlyPublished,
+                    Page = page,
+                    PageSize = pageSize
+                });
+
+            var totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
+
+            return new SayfalamaDto<Models.Training>
+            {
+                Items = trainings,
+                Page = page,
+                PageSize = pageSize,
+                TotalItems = totalItems,
+                TotalPages = totalPages
+            };
+        }
         public async Task<Models.Training> GetByIdAsync(int id)
         {
             var training = await trainingRepository.GetTrainingByIdAsync(id);

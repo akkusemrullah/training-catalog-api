@@ -41,13 +41,35 @@ namespace training_catalog_api.Repositories.Training
             return training;
         }
 
-        public async Task<List<Models.Training>> GetTrainingListAsync(int pageNumber, int pageSize)
+        public async Task<(List<Models.Training> Trainings, int TotalItems)> GetTrainingListAsync(TrainingListQuery q)
         {
-            return await context.Trainings
-              .AsNoTracking()
-              .Skip((pageNumber - 1) * pageSize)
-              .Take(pageSize)
-              .ToListAsync();
+            var query = context.Trainings
+                .AsNoTracking()
+                .Include(t => t.Category)  // kategori adı gösterilecekse
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(q.Search))
+            {
+                var pat = $"%{q.Search.Trim()}%";
+                query = query.Where(t => EF.Functions.Like(t.Title, pat));
+            }
+
+            if (q.CategoryId.HasValue)
+                query = query.Where(t => t.CategoryId == q.CategoryId.Value);
+
+            if (q.IsPublished ?? true)     // default: sadece yayınlananlar
+                query = query.Where(t => t.IsPublished);
+
+            var totalItems = await query.CountAsync();
+
+            var skip = Math.Max(q.Page - 1, 0) * q.PageSize;
+            var trainings = await query
+                .OrderByDescending(t => t.CreatedAt) // kararlı sıralama önerilir
+                .Skip(skip)
+                .Take(q.PageSize)
+                .ToListAsync();
+
+            return (trainings, totalItems);
         }
 
         public async Task UpdateTrainingAsync(Models.Training training)

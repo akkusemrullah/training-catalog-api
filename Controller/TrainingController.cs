@@ -1,3 +1,4 @@
+using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using training_catalog_api.Services.Training;
 
@@ -15,14 +16,24 @@ namespace training_catalog_api.Controller
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllTrainings([FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
+        public async Task<IActionResult> GetAllTrainings(
+            [FromQuery] string? search,
+            [FromQuery] int? categoryId,
+            [FromQuery] bool? isPublished,
+            [FromQuery] int pageNumber = 1,
+            [FromQuery] int pageSize = 10)
         {
-            var trainings = await trainingService.GetAllAsync(pageNumber, pageSize);
-            if (!trainings.Any())
+            var result = await trainingService.GetAllAsync(new TrainingListQuery
             {
-                return NoContent();
-            }
-            return Ok(trainings);
+                Search = search,
+                CategoryId = categoryId,
+                IsPublished = isPublished,   // null ise service default true uygular
+                Page = pageNumber,
+                PageSize = pageSize
+            });
+
+            // ÖNEMLİ: 200 + boş liste döndür (UI "No results" göstersin)
+            return Ok(result);
         }
 
         [HttpGet("{id}")]
